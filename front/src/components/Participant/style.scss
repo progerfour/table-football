@@ -1,0 +1,57 @@
+@import '../../styles/variable.scss';
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.participant {
+    margin:8px auto;
+    padding: 15px;
+    display: flex;
+    border:thin solid #ccc;
+    border-radius: $radius;
+    cursor: pointer;
+    background: $light-white;
+}
+
+.participant__photo {
+    height: 200px;
+    width: 200px;
+    background-size: cover;
+    background-position: center;
+}
+
+@media (max-width:768px){
+    .participant__photo {
+        height: 100px;
+        width: 100px;
+    }
+    .participant {
+        margin: 5px auto;
+        padding: 5px;
+    }
+}
+
+@media (max-width:350px){
+    .participant__photo {
+        height: 90px;
+        width: 90px;
+    }
+}
+
+
+
+.participant__info {
+    padding-left: 25px;
+    display: flex;
+    flex-flow:column;
+    justify-content: center;
+    font-family: sans-serif;
+}
+
+.participant__name {
+    margin-bottom: 25px;
+    text-transform: uppercase;
+} 
+

@@ -1,0 +1,31 @@
+@import '../../styles/variable.scss';
+.pageButton {
+    background: $light-white;
+    text-align: center;
+    height: 70px;
+    width: 70px;
+    position: absolute;
+    border:thin solid #ccc;
+    border-radius: $radius;
+    &_right{
+        right: 0px;
+    }
+    p {
+        color: $black;
+    }
+}
+
+.image {
+    height: 50px;
+    width:50px;
+    margin: auto;   
+}
+
+.exit {
+    background-image: url("/images/exit.png");
+}
+
+.group {
+    background-image: url("/images/group.png");
+}
+

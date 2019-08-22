@@ -1,0 +1,57 @@
+@import '../../styles/variable.scss';
+.match {
+    height: 100%;
+    background-image: url("/images/match.jpg");
+    background-size: cover;
+    background-position: center bottom;
+    display: flex;
+    flex-direction: column;
+
+    &__result {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex:1;
+    }
+  
+    &__content {
+      display: flex;
+      color: $black;
+      background: $light-white;
+      margin:8px auto;
+      padding: 15px;
+      flex-direction: row;
+      align-items: center;
+      border:thin solid #ccc;
+      border-radius: $radius;
+      padding:30px;
+    }
+    
+    .content_score{
+      width: 100px;
+      text-align: center;
+      margin: 10px;
+    }
+
+    .content__name{
+      text-align: center;
+    }
+
+    img {
+      height: 200px;
+      width: 200px;
+      background-size: cover;
+      background-position: center;
+    }
+  
+    @media (max-width:768px){
+      img {
+        height: 100px;
+        width: 100px;
+      }
+
+      &__content{
+        flex-direction: column;
+      }
+    }
+}

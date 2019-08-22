@@ -1,0 +1,25 @@
+@import '../../styles/variable.scss';
+.block {
+    p {
+        font-size: 18px;
+        line-height: 21px;
+        letter-spacing: 0.1px;
+        opacity: 0.5;
+        margin: 10px 0px 0px 0px;
+        color:$black;
+    }
+
+    a{
+        display: block;
+        color: #ADADAD;
+    }
+
+    .center {
+        text-align: center;
+    }
+    .small {
+        font-size: 14px;
+        margin-top:10px;
+    }
+}
+

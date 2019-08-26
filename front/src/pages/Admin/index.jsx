@@ -1,8 +1,7 @@
 import React from 'react';
 import {Input} from 'antd';
-import {Button,Block,Participant} from '../../components';
+import {Button,Block} from '../../components';
 import './Admin.scss';
-import {BrowserRouter as Router, Route,Link} from "react-router-dom";
 
 const Admin = () => {
     return (

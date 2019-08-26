@@ -1,8 +1,8 @@
 import React from 'react';
 import {Input} from 'antd';
-import {Button,Block,Participant} from '../../components';
+import {Button,Block} from '../../components';
 import './Auth.scss';
-import {BrowserRouter as Router, Route,Link} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 const Auth = () => {
     return (

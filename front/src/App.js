@@ -1,7 +1,19 @@
 import React, {Component} from 'react';
 import {Auth,ListOfPartisipants,Match,Admin} from './pages';
 import {BrowserRouter ,Route, Switch} from "react-router-dom";
-import { connect } from 'react-redux';
+
+const mmatch =  {
+  "player1":{
+    "name":"Лена"
+  },
+  "player2":{
+    "name":"Катя"
+  },
+  "score":{
+    "player1":4,
+    "player2":3
+  } 
+};
 
 class App extends Component {
   render(){
@@ -11,8 +23,7 @@ class App extends Component {
         <BrowserRouter>
           <Switch>
             <Route exact path="/"><Auth></Auth></Route>
-            <Route path="/participants"><ListOfPartisipants list={users.items
-            }>
+            <Route path="/participants"><ListOfPartisipants >
               </ListOfPartisipants></Route>
             <Route path="/match" component={Match(mmatch)}></Route>
             <Route path="/admin"><Admin></Admin></Route>
@@ -24,13 +35,4 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = store => {
-  console.log(store)
-  return {
-    users: store.users,
-  }
-}
-
-export default connect(mapStateToProps)(App)
-
-//export default App;
+export default App;

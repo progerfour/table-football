@@ -1,24 +1,75 @@
 import express from "express";
-import { UserModel } from "../schemas";
+import { UserModel, AvatarModel } from "../schemas";
 
 class UserController { 
     constructor(){
         const p = 123;
     };
+ 
+    getAvatar(){
+        var id, number;
+        console.log("getAvatar");
+        AvatarModel.find({}, function (err, avatars) {
+            console.log("find");
+            if (err) {
+               return err;
+            }
+            console.log("avatars",avatars);
+            number = +avatars[0].number < 30 ? +avatars[0].number + 1 : 1;
+            id = avatars[0]._id;           
+        }).then( () => {
+            const send = {"number":number};
+            console.log("send",send);
+            AvatarModel.findByIdAndUpdate(id, {$set:send},(err)=>{
+                if (err)
+                    return err;
+                else 
+                    return {"number":number};
+            })  
+        });
+        return 0;
+    }
 
     create(req, res) {
-        const postData = {
-          name: req.body.name
-        };
-        const user = new UserModel(postData);
-        user
-        .save()
-        .then((obj) => {
-         res.json(obj); 
+        console.log("пришли данные о пользователе", req.body);
+        //avatar begin
+        var id, number;
+        console.log("getAvatar");
+        AvatarModel.find({}, function (err, avatars) {
+            console.log("find");
+            if (err) {
+               return res.json(err);
+            }
+            console.log("avatars",avatars);
+            number = +avatars[0].number < 30 ? +avatars[0].number + 1 : 1;
+            id = avatars[0]._id;           
+        }).then( () => {
+            const send = {"number":number};
+            console.log("send",send);
+            AvatarModel.findByIdAndUpdate(id, {$set:send},(err)=>{
+                if (err)
+                    return res.json(err);
+            })  
         })
-        .catch(reason =>{
-          res.json(reason);
-        });
+        //avatar end
+        .then(()=>{
+            const postData = {
+                name: req.body.name,
+                avatar: number + ".jpg"
+              };
+              const user = new UserModel(postData);
+              user
+              .save()
+              .then((obj) => {
+              console.log("пользователь создан");
+               res.json(obj); 
+              })
+              .catch(reason =>{
+                  console.log("произошла ошибка", reason);
+                res.json(reason);
+              });
+        })
+
     }
     
     index(req,res){
@@ -34,12 +85,13 @@ class UserController {
     }
 
     getAll(req,res){
-        UserModel.find().then((err,users) => {
+        UserModel.find({}, (err, users) =>{
             if (err){
+                console.log("users",users);
                 return res.send(err);
             }
             res.json(users);
-        });
+        });    
     }
 
     update(req,res){
@@ -53,20 +105,6 @@ class UserController {
 
 
     delete(req, res) {
-        // const id = req.params.id;
-        // UserModel.findOneAndRemove (id)
-        // .then(user=>{
-        //     if (user) {
-        //         res.json({
-        //             message: "User deleted"
-        //         });
-        //     }
-        // })
-        // .catch(err =>{
-        //     res.json({
-        //         message: "User not found"
-        //     });
-        // });
         UserModel.remove({
             _id: req.params.id
         }).then(user => {
@@ -81,6 +119,22 @@ class UserController {
             }
         })
     }
+
+    newAvatar(){
+        const number = new AvatarModel({number: 1});
+        number
+        .save()
+        .then((obj) => {
+         res.json(obj); 
+        })
+        .catch(reason =>{
+            console.log("произошла ошибка", reason);
+          res.json(reason);
+        });
+    }
+
+    
 }
 
 export { UserController};
+

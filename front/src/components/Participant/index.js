@@ -18,6 +18,7 @@ const Stat = ({win,wasted}) => {
 
 class Participant extends Component {
     static propTypes = {
+        _id: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
         img: PropTypes.string,
         win:PropTypes.number,
@@ -43,13 +44,13 @@ class Participant extends Component {
     })
 
     render(){
-      let { name, img, win, wasted } = this.state;
+      let { _id, name, img, win, wasted } = this.state;
       return (
         <Row>
-        <div className="participant">
+        <div key={_id} className="participant">
           <Col span={10}>
           {(img != null) ? 
-           <img className='participant__photo' src={img} alt="аватар участника"/> : <div></div>
+           <img className='participant__photo' src={"images/" + img} alt="аватар участника"/> : <div></div>
           }
           </Col>
           <Col span={14}>

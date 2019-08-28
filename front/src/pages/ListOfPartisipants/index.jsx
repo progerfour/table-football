@@ -2,10 +2,9 @@ import React, {Component} from 'react';
 import {PageButton, Participant} from '../../components';
 import { Row, Col,Spin } from 'antd';
 import {Link} from "react-router-dom";
-import {connect} from "react-redux"
+import {connect} from "react-redux";
 
 import './ListOfPartisipants.scss';
-
 import {Service} from '../../service';
 
 var service = new Service();

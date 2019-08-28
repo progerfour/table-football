@@ -1,11 +1,17 @@
-import React, {useCallback,useState} from 'react';
+import React, {useState} from 'react';
 import {Input} from 'antd';
-import {Link,Redirect , withRouter} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 
 import {Button,Block} from '../../components';
 import './Auth.scss';
 import {default as axios} from '../../axios';
+import io from 'socket.io-client';
 
+ 
+const socket = io('http://localhost:9998/');
+socket.on('uiop',(data)=>{console.log("uiop done",data)});
+socket.on('test1',(data)=>{console.log("test1 done",data)});
+socket.on('updateScore',(data)=>{console.log("new score",data)});
 
 const Auth = withRouter(({history}) => {
     const [isSending, setIsSending] = useState(false);
@@ -40,6 +46,9 @@ const Auth = withRouter(({history}) => {
         setErrorMsg("");
     }
 
+    const sendRequest1 = () => {
+        socket.emit("adminUpdateScore",{newScore:"bitch"});
+    }
     return (
         <section className="auth">
             <div className="auth__content">

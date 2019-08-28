@@ -1,13 +1,16 @@
 import mongoose, {Schema} from 'mongoose';
 
-const AvatarSchema = new Schema ({
+const AdminSchema = new Schema ({
     login: {
        type: String,
        required: 'true',
     },
-    
+    password : {
+        type: String,
+        required:'true'
+    }
 });
 
-const AvatarModel = mongoose.model('Avatar', AvatarSchema);
+const AdminModel = mongoose.model('Admin', AdminSchema);
 
-export default AvatarModel;
+export default AdminModel;

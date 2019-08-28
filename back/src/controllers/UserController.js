@@ -1,4 +1,3 @@
-import express from "express";
 import { UserModel, AvatarModel } from "../schemas";
 
 class UserController { 
@@ -24,7 +23,7 @@ class UserController {
                 if (err)
                     return err;
                 else 
-                    return {"number":number};
+                    return send;
             })  
         });
         return 0;
@@ -136,5 +135,5 @@ class UserController {
     
 }
 
-export { UserController};
+export {UserController};
 

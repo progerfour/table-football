@@ -1,7 +1,12 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col } from 'antd';
+import { Row, Col, Button } from 'antd';
+import {connect} from "react-redux"
+
 import './style.scss';
+import {Service} from '../../service';
+
+var service = new Service();
 
 const Stat = ({win,wasted}) => {
   return (
@@ -33,9 +38,11 @@ class Participant extends Component {
     constructor(props){
       super(props)
       this.state = {
+          _id:props._id,
           name : props.name,
           img : props.img
       }
+      this.deleteUser = this.deleteUser.bind(this);   
     }
 
     update = (name, img) => this.setState({
@@ -43,8 +50,19 @@ class Participant extends Component {
         img
     })
 
+    deleteUser (event) {
+      console.log(this.state._id);
+      service.deleteUser(this.state._id)
+      .then(response => {
+          console.log(response);
+          service.getUsers().then( (items) => {
+            this.props.usersLoaded(items.data);
+            });
+      });
+    }
+
     render(){
-      let { _id, name, img, win, wasted } = this.state;
+      let { _id, name, img, win, wasted } = this.state;   
       return (
         <Row>
         <div key={_id} className="participant">
@@ -57,8 +75,8 @@ class Participant extends Component {
           <div className="participant__info">
             <div className="participant__name">Имя: {name}</div>
             <Stat win={win} wasted={wasted}></Stat>
+            <Button icon="delete" onClick={this.deleteUser}></Button>
           </div>
-          
           </Col>
         </div>
         </Row>
@@ -66,4 +84,21 @@ class Participant extends Component {
     }
   }
 
-export {Participant};
+ const mapStateToProps = (state) => {
+    console.log("mapStateToPropsstate", state)
+    return {
+        isAdmin : state.isAdmin,
+    };
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        usersLoaded: (newUsers) => {
+            dispatch({
+                type: 'USER_LOADED',
+                payload: newUsers
+            })
+        }
+    }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(Participant); 

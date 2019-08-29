@@ -54,7 +54,9 @@ class UserController {
         .then(()=>{
             const postData = {
                 name: req.body.name,
-                avatar: number + ".jpg"
+                avatar: number + ".jpg",
+                win:0,
+                wasted:0
               };
               const user = new UserModel(postData);
               user

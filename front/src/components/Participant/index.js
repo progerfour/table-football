@@ -22,29 +22,21 @@ const Stat = ({win,wasted}) => {
 };
 
 class Participant extends Component {
-    static propTypes = {
-        _id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        img: PropTypes.string,
-        win:PropTypes.number,
-        wasted:PropTypes.number,
-        isAdmin:PropTypes.bool
-    }
-    
-    static defaultProps = {
-        name: "unknown",
-        img : "img.jpg"
-    }
 
     constructor(props){
       console.log("propsPartisipant",props)
       super(props)
-      this.state = {
-          _id:props._id,
-          name : props.name,
-          img : props.img,
-          isAdmin: props.isAdmin
+      
+       this.state = {
+          _id:props.item._id,
+          name : props.item.name,
+          img : props.item.avatar,
+          isAdmin: props.item.isAdmin,
+          win : props.item.win,
+          wasted : props.item.wasted,
+          isPlayer : props.item.isPlayer
       }
+      console.log("id",this.state._id);
       this.deleteUser = this.deleteUser.bind(this);   
     }
 
@@ -64,20 +56,21 @@ class Participant extends Component {
     }
 
     render(){
-      let { _id, name, img, win, wasted, isAdmin } = this.state;   
+      let { _id, name, img, win, wasted, isAdmin, isPlayer } = this.state; 
+      const classForPhoto = isPlayer ? "participant__photo" : "participant__photo noPlay";
       return (
         <Row>
         <div key={_id} className="participant">
           <Col span={10}>
-          {(img != null) ? 
-           <img className='participant__photo' src={"images/" + img} alt="аватар участника"/> : <div></div>
+          {(img != null) && 
+           <img className={classForPhoto} src={"images/" + img} alt="аватар участника"/> 
           }
           </Col>
           <Col span={14}>
           <div className="participant__info">
-            <div className="participant__name">Имя: {name}</div>
+            <div className="participant__name">Имя: {name} {!isPlayer && "[выбыл]"} </div>
             <Stat win={win} wasted={wasted}></Stat>
-            {(isAdmin) &&
+            {//(isAdmin) &&
               <Button icon="delete" onClick={this.deleteUser}></Button>
             }
           </div>

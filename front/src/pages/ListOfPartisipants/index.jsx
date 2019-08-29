@@ -33,7 +33,7 @@ class ListOfPartisipants extends Component {
                 <Row type="flex" justify="center" gutter={16}>
                     {listOfPartisipants.map(item => (
                         <Col xs={18} lg={10} key={item._id} >
-                            <Participant _id={item._id} name={item.name} win={12} wasted={13} img={item.avatar}/>
+                            <Participant item={item}/>
                         </Col>
                     ))}
                 </Row>

@@ -22,6 +22,11 @@
     background-position: center;
 }
 
+.noPlay {
+    filter: grayscale(100%); 
+}
+
+
 @media (max-width:768px){
     .participant__photo {
         height: 100px;

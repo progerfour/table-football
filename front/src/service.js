@@ -15,4 +15,12 @@ export class Service {
             }
         }); 
     }
+
+    newMatch(){
+        return axios.post(`${axios.defaults.baseURL}/match/create`);
+    }
+
+    getCurrientMatch() {
+        return axios.get(`${axios.defaults.baseURL}/match/currient`);
+    }
 }

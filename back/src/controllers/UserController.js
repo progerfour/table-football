@@ -2,7 +2,7 @@ import { UserModel, AvatarModel } from "../schemas";
 
 class UserController { 
     constructor(){
-        const p = 123;
+
     };
  
     getAvatar(){

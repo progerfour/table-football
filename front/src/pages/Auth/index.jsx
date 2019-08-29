@@ -25,6 +25,7 @@ const Auth = (props) => {
             props.adminExit(false);
         }
     })
+    
     const sendRequest = () => {
       // don't send again while we are sending
       if (isSending) return

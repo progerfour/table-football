@@ -6,13 +6,30 @@ import { PageButton, Button } from '../../components';
 import './Match.scss';
 import {Service} from '../../service';
 
+const service = new Service();
 const Match = (props) => {
   const {isAdmin, game} = props;
-  const {player1, player2, score} = game;
+  let {
+    avatar1,
+    avatar2,
+    id_player1,
+    id_player2,
+    isEnd,
+    name1,
+    name2,
+    score_p1,
+    score_p2
+  } = game;
 
   useEffect (() => {
-    
+
   });
+
+  const newMatch = () => {
+    service.newMatch().then((response) => {
+      props.getMatch(response.data);
+    })
+  }
 
     return(
     <section className="match">
@@ -26,20 +43,20 @@ const Match = (props) => {
       <div className="match__result">
         <div className="match__content">
           <div className="content_first">
-            <img className="content__photo" src="images/1.jpg" alt="аватар участника"/>
-            <div className="content__name">{player1.name}</div>
+            <img className="content__photo" src={"images/"+avatar1} alt="аватар участника"/>
+            <div className="content__name">{name1}</div>
           </div>
           <div className="content_score">
-            <h1>{score.player1} : {score.player2}</h1>
+            <h1>{score_p1} : {score_p2}</h1>
           </div>
           <div className="content_second">
-            <img className="content__photo" src="images/2.jpg" alt="аватар участника"/>
-            <div className="content__name">{player2.name}</div>
+            <img className="content__photo" src={"images/"+avatar2}  alt="аватар участника"/>
+            <div className="content__name">{name2}</div>
           </div>
         </div>       
       </div>
       {(isAdmin) &&
-      <Button  type="primary" size="large">Начать новый матч</Button>
+      <Button  type="primary" size="large" onClick={newMatch}>Начать новый матч</Button>
       }
     </section>
     )
@@ -53,4 +70,15 @@ const mapStateToProps = (state) => {
     };
 }
 
-export default connect(mapStateToProps)(Match);
+const mapDispatchToProps = (dispatch) => {
+  return {
+      getMatch: (value) => {
+          dispatch({
+              type: 'MATH_LOADED',
+              payload:value
+          })
+      }
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Match);

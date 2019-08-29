@@ -1,11 +1,12 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Input} from 'antd';
 import {Link, withRouter} from "react-router-dom";
+import { connect, useSelector } from "react-redux"
+import io from 'socket.io-client';
 
 import {Button,Block} from '../../components';
 import './Auth.scss';
 import {default as axios} from '../../axios';
-import io from 'socket.io-client';
 
  
 const socket = io('http://localhost:9998/');
@@ -13,10 +14,17 @@ socket.on('uiop',(data)=>{console.log("uiop done",data)});
 socket.on('test1',(data)=>{console.log("test1 done",data)});
 socket.on('updateScore',(data)=>{console.log("new score",data)});
 
-const Auth = withRouter(({history}) => {
+const Auth = (props) => {
     const [isSending, setIsSending] = useState(false);
     const [nameUser, setNameUser] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
+    const admin = useSelector(state => state.admin.isAdmin)
+
+    useEffect (() => {
+        if (admin) {
+            props.adminExit(false);
+        }
+    })
     const sendRequest = () => {
       // don't send again while we are sending
       if (isSending) return
@@ -34,7 +42,7 @@ const Auth = withRouter(({history}) => {
                 console.log(errmsg);
               }
           } else {
-            history.push('/match');
+            props.history.push('/match');
           }
       })  //axios.get(`${axios.defaults.baseURL}/users`); 
       // once the request is sent, update state again
@@ -69,6 +77,23 @@ const Auth = withRouter(({history}) => {
             </div>
         </section>
     )
-});
+};
 
-export default Auth;
+const mapStateToProps = (state) => {
+    console.log("authstate", state)
+    return {
+        isAdmin : state.admin.isAdmin
+    };
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        adminExit: (value) => {
+            dispatch({
+                type: 'ADMIN_UPDATE',
+                payload:value
+            })
+        }
+    }
+}
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(Auth));

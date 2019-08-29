@@ -5,7 +5,7 @@ const initialState = {
 export default (state = initialState, action) => {
     const {type,payload} = action;
     switch (type) {
-        case "ADMIN_ENTERED":
+        case "ADMIN_UPDATE":
             return {
                 isAdmin:payload
             }

@@ -27,7 +27,8 @@ class Participant extends Component {
         name: PropTypes.string.isRequired,
         img: PropTypes.string,
         win:PropTypes.number,
-        wasted:PropTypes.number
+        wasted:PropTypes.number,
+        isAdmin:PropTypes.bool
     }
     
     static defaultProps = {
@@ -36,11 +37,13 @@ class Participant extends Component {
     }
 
     constructor(props){
+      console.log("propsPartisipant",props)
       super(props)
       this.state = {
           _id:props._id,
           name : props.name,
-          img : props.img
+          img : props.img,
+          isAdmin: props.isAdmin
       }
       this.deleteUser = this.deleteUser.bind(this);   
     }
@@ -51,7 +54,6 @@ class Participant extends Component {
     })
 
     deleteUser (event) {
-      console.log(this.state._id);
       service.deleteUser(this.state._id)
       .then(response => {
           console.log(response);
@@ -62,7 +64,7 @@ class Participant extends Component {
     }
 
     render(){
-      let { _id, name, img, win, wasted } = this.state;   
+      let { _id, name, img, win, wasted, isAdmin } = this.state;   
       return (
         <Row>
         <div key={_id} className="participant">
@@ -75,7 +77,9 @@ class Participant extends Component {
           <div className="participant__info">
             <div className="participant__name">Имя: {name}</div>
             <Stat win={win} wasted={wasted}></Stat>
-            <Button icon="delete" onClick={this.deleteUser}></Button>
+            {(isAdmin) &&
+              <Button icon="delete" onClick={this.deleteUser}></Button>
+            }
           </div>
           </Col>
         </div>
@@ -87,7 +91,7 @@ class Participant extends Component {
  const mapStateToProps = (state) => {
     console.log("mapStateToPropsstate", state)
     return {
-        isAdmin : state.isAdmin,
+        isAdmin : state.admin.isAdmin,
     };
 }
 

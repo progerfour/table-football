@@ -71,7 +71,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         adminEnter: (value) => {
             dispatch({
-                type: 'ADMIN_ENTERED',
+                type: 'ADMIN_UPDATE',
                 payload:value
             })
         }

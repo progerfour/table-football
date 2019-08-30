@@ -1,13 +1,18 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import { Link } from "react-router-dom";
-import { connect, useSelector } from "react-redux"
+import { connect } from "react-redux"
 
 import { PageButton, Button } from '../../components';
 import './Match.scss';
 import {Service} from '../../service';
 
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:9998/');
+
 const service = new Service();
 const Match = (props) => {
+ 
   const {isAdmin, game} = props;
   let {
     avatar1,
@@ -22,13 +27,16 @@ const Match = (props) => {
   } = game;
 
   useEffect (() => {
-
-  });
-
-  const newMatch = () => {
-    service.newMatch().then((response) => {
+    socket.on('newMatchCreated',(data)=>{
+      props.getMatch(data);
+    });
+    service.getCurrientMatch().then((response) => {
       props.getMatch(response.data);
     })
+  }, []);
+
+  const newMatch = () => {
+    socket.emit('newMatch');
   }
 
     return(
@@ -43,14 +51,14 @@ const Match = (props) => {
       <div className="match__result">
         <div className="match__content">
           <div className="content_first">
-            <img className="content__photo" src={"images/"+avatar1} alt="аватар участника"/>
+            <img className="content__photo" key={id_player1} src={"images/"+avatar1} alt="аватар участника"/>
             <div className="content__name">{name1}</div>
           </div>
           <div className="content_score">
             <h1>{score_p1} : {score_p2}</h1>
           </div>
           <div className="content_second">
-            <img className="content__photo" src={"images/"+avatar2}  alt="аватар участника"/>
+            <img className="content__photo" key={id_player2} src={"images/"+avatar2}  alt="аватар участника"/>
             <div className="content__name">{name2}</div>
           </div>
         </div>       
@@ -63,7 +71,6 @@ const Match = (props) => {
 };
 
 const mapStateToProps = (state) => {
-    console.log("authstate", state)
     return {
         isAdmin : state.admin.isAdmin,
         game: state.match.game

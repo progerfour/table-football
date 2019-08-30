@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import { Row, Col, Button } from 'antd';
 import {connect} from "react-redux"
 
@@ -70,7 +69,7 @@ class Participant extends Component {
           <div className="participant__info">
             <div className="participant__name">Имя: {name} {!isPlayer && "[выбыл]"} </div>
             <Stat win={win} wasted={wasted}></Stat>
-            {//(isAdmin) &&
+            {(isAdmin) &&
               <Button icon="delete" onClick={this.deleteUser}></Button>
             }
           </div>

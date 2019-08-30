@@ -1,18 +1,19 @@
 import { MatchModel, UserModel } from "../schemas";
 
+
 class MatchController { 
 
   constructor(){
    
   };
 
-  create(req, res) {
+  create() {
     let random = require('random');
     let users =[];
-    UserModel.find({isPlayer:true}, (err, result) =>{
+    return  UserModel.find({isPlayer:true}, (err, result) =>{
       if (err){
           console.log("users",result);
-          return res.send(err);
+          return err;
       }
       console.log(result);
       users = result;
@@ -20,7 +21,7 @@ class MatchController {
       const count = users.length-1;
       console.log(count);
       if (count == 1) {
-        return res.json({message: "winner is founded!"});
+        return {message: "winner is founded!"};
       }
       let player1 =0, player2=0;
       while (player1 == player2) {
@@ -36,10 +37,9 @@ class MatchController {
       };
 
       const match = new MatchModel(postData);
-      match
+      return match
       .save()
       .then((obj) => {
-      console.log("текущий матч создан");
         let send = {
           ...obj._doc,
           avatar1: users[player1].avatar,
@@ -47,16 +47,17 @@ class MatchController {
           name1: users[player1].name,
           name2: users[player2].name,
         }
-        res.json(send); 
+        console.log("текущий матч создан",send);
+         return send; 
       })
       .catch(reason =>{
         console.log("произошла ошибка", reason);
-        res.json(reason);
+        return reason;
       });
     })      
     .catch(reason =>{
       console.log("произошла ошибка", reason);
-      res.json(reason);
+      return reason;
     });
   } 
 

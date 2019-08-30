@@ -2,17 +2,10 @@ import React, {useState, useEffect} from 'react';
 import {Input} from 'antd';
 import {Link, withRouter} from "react-router-dom";
 import { connect, useSelector } from "react-redux"
-import io from 'socket.io-client';
 
 import {Button,Block} from '../../components';
 import './Auth.scss';
 import {default as axios} from '../../axios';
-
- 
-const socket = io('http://localhost:9998/');
-socket.on('uiop',(data)=>{console.log("uiop done",data)});
-socket.on('test1',(data)=>{console.log("test1 done",data)});
-socket.on('updateScore',(data)=>{console.log("new score",data)});
 
 const Auth = (props) => {
     const [isSending, setIsSending] = useState(false);
@@ -55,9 +48,9 @@ const Auth = (props) => {
         setErrorMsg("");
     }
 
-    const sendRequest1 = () => {
-        socket.emit("adminUpdateScore",{newScore:"bitch"});
-    }
+    // const sendRequest1 = () => {
+    //     socket.emit("adminUpdateScore",{newScore:"bitch"});
+    // }
     return (
         <section className="auth">
             <div className="auth__content">

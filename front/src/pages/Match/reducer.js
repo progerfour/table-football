@@ -13,6 +13,16 @@ export default (state = initialState, action) => {
                 game:payload
             }
         }
+        case "SCORE_LOADED": {
+            return {
+                ...state,
+                game: {
+                ...state.game,
+                "score_p1": payload.score_p1,
+                "score_p2": payload.score_p2  
+                }
+            }
+        }
         default:
             return state;
     }

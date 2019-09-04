@@ -30,7 +30,7 @@ class Participant extends Component {
           _id:props.item._id,
           name : props.item.name,
           img : props.item.avatar,
-          isAdmin: props.item.isAdmin,
+          isAdmin: props.isAdmin,
           win : props.item.win,
           wasted : props.item.wasted,
           isPlayer : props.item.isPlayer

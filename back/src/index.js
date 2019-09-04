@@ -17,8 +17,14 @@ io.on('connection', function (socket) {
     Match.create().then((value) =>{
       io.emit('newMatchCreated', value);
     });
-
   });
+
+  socket.on('updateScore', function (data) {
+    Match.updateScore(data).then((value) =>{
+      io.emit('matchUpdated', value);
+    })
+  });
+
 });
 
 var app = express();

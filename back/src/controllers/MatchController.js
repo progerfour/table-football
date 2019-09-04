@@ -12,14 +12,14 @@ class MatchController {
     let users =[];
     return  UserModel.find({isPlayer:true}, (err, result) =>{
       if (err){
-          console.log("users",result);
+         
           return err;
       }
       console.log(result);
       users = result;
     }).then (()=>{ 
       const count = users.length-1;
-      console.log(count);
+     
       if (count == 1) {
         return {message: "winner is founded!"};
       }
@@ -71,8 +71,7 @@ class MatchController {
   }).then(() => {
     UserModel.findById(send.id_player1, (err, result) =>{
       if (err){
-          console.log("id",send.id_player1);
-          return res.send({"по айди не нашелся":err});
+          return res.send({"по айди не нашелся 1":err});
       }
       send = { 
         ...send, 
@@ -83,8 +82,7 @@ class MatchController {
     }).then(()=>{
       UserModel.findById(send.id_player2, (err, result) =>{
         if (err){
-            console.log("id",send.id_player2);
-            return res.send({"по айди не нашелся":err});
+            return res.send({"по айди не нашелся 2":err});
         }
         console.log(result);
         send = { 
@@ -106,6 +104,29 @@ class MatchController {
       else 
         res.json({message:"match updated"});
     })
+  }
+
+  updateScore({_id, player, score}) {
+    let match;
+
+    return MatchModel.findById(_id,(err,curMatch)=>{
+      if (err)
+        return err;
+      else {
+        console.log("match is found");
+        match = curMatch;
+      }
+    }).then( () =>{
+      player == 1 ? 
+      match.score_p1 = match.score_p1 + score
+      : match.score_p2 = match.score_p2 + score;
+
+      return MatchModel.findByIdAndUpdate(_id, {$set:match},(err) => {
+        if (err)
+        return res.send(err);
+      })
+    })
+    
   }
 }
 

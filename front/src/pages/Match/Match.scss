@@ -30,7 +30,11 @@
     .content_score{
       width: 100px;
       text-align: center;
-      margin: 10px;
+      margin: 0px 10px 5px 10px;
+
+      h1 > div {
+        display: inline;
+      }
     }
 
     .content__name{
@@ -43,6 +47,14 @@
       background-size: cover;
       background-position: center;
     }
+
+    .winner {
+      position: absolute;
+      margin-left: -250px;
+      width: 150px;
+      height: 100px;
+      margin-top: 0px;
+    }
   
     @media (max-width:768px){
       img {
@@ -52,6 +64,14 @@
 
       &__content{
         flex-direction: column;
+      }
+
+      .winner{
+        position: absolute;
+        margin-left: -120px;
+        width: 80px;
+        height: 50px;
+        margin-top: 0px;
       }
     }
 }

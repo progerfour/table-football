@@ -20,8 +20,13 @@ io.on('connection', function (socket) {
   });
 
   socket.on('updateScore', function (data) {
-    Match.updateScore(data).then((value) =>{
-      io.emit('matchUpdated', value);
+    Match.updateScore(data).then((match) =>{
+      if (match.isEnd) {
+        Match.ended(match).then( () =>{
+          io.emit('matchUpdated', match); //отдаст ответ клиент
+        }); //сделает всё что нужно для окончания матча
+      } else
+        io.emit('matchUpdated', match); //отдаст ответ клиент
     })
   });
 

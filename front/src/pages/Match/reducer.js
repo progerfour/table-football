@@ -18,6 +18,7 @@ export default (state = initialState, action) => {
                 ...state,
                 game: {
                 ...state.game,
+                "isEnd":payload.isEnd,
                 "score_p1": payload.score_p1,
                 "score_p2": payload.score_p2  
                 }

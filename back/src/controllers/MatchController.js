@@ -20,8 +20,8 @@ class MatchController {
     }).then (()=>{ 
       const count = users.length-1;
      
-      if (count == 1) {
-        return {message: "winner is founded!"};
+      if ( users.length == 1) {
+        return {isWinner:true,user:users[0],message: "winner is founded!"};
       }
       let player1 =0, player2=0;
       while (player1 == player2) {
@@ -62,13 +62,18 @@ class MatchController {
   } 
 
   getCurrient(req,res) {
-    let send = {};
+    let send;
     MatchModel.find({isEnd:false}, (err, matches) =>{
       if (err){
           return res.send(err);
       }
-      send = matches[0]._doc;
+      if (matches.length > 0)
+        send = matches[0]._doc;
   }).then(() => {
+    console.log("send",send);
+    if (!send) {
+      return {errMsg: "нет текущего матча"}
+    }
     UserModel.findById(send.id_player1, (err, result) =>{
       if (err){
           return res.send({"по айди не нашелся 1":err});
@@ -120,13 +125,35 @@ class MatchController {
       player == 1 ? 
       match.score_p1 = match.score_p1 + score
       : match.score_p2 = match.score_p2 + score;
-
+      match.isEnd = match.score_p1 == 10  || match.score_p2 == 10;
+      
       return MatchModel.findByIdAndUpdate(_id, {$set:match},(err) => {
         if (err)
         return res.send(err);
       })
     })
-    
+  }
+
+  ended(match){
+      let idwin = match.score_p1 == 10 ? match.id_player1 :  match.id_player2,
+      idloser = match.score_p1 == 10 ? match.id_player2 :  match.id_player1,
+      numberWins = 0;
+      UserModel.findById(idwin,(err,result)=>{
+        if (err)
+            return {"error":err};
+        else 
+            numberWins = result.win + 1;
+      }).then(()=>{
+        UserModel.findByIdAndUpdate(idwin, {$set:{win: numberWins}},(err) => {
+          if (err)
+          return res.send(err);
+        }).then( ()=> {
+          return UserModel.findByIdAndUpdate(idloser, {$set:{wasted: 1, isPlayer: false}},(err) => {
+            if (err)
+            return res.send(err);
+          })
+      })
+    });
   }
 }
 

@@ -1,36 +1,53 @@
 import { MatchModel, UserModel } from "../schemas";
 
-
 class MatchController { 
 
-  constructor(){
-   
+  constructor(){    
   };
 
   create() {
     let random = require('random');
-    let users =[];
+    let users = [];
+    let minWin;
     return  UserModel.find({isPlayer:true}, (err, result) =>{
       if (err){
-         
           return err;
       }
       console.log(result);
       users = result;
-    }).then (()=>{ 
-      const count = users.length-1;
-     
-      if ( users.length == 1) {
+    }).then (()=>{           
+      if (users.length == 1) {
         return {isWinner:true,user:users[0],message: "winner is founded!"};
       }
-      let player1 =0, player2=0;
-      while (player1 == player2) {
-        player1 = random.int(0, count);
-        player2 = random.int(0, count);
+      minWin = users[0].win;
+      for (let i=1;i<users.length;i++){
+        if (minWin > users[i].win)
+          minWin = users[i].win;
       }
+      console.log("minWin",minWin);
+
+      let player1, player2;
+      let minList = users.filter(user => user.win === minWin);
+      console.log("minList.length",minList.length);
+      if (minList.length === 1) {
+        player1 = minList[0];//users.findIndex(user => user.win === minWin)
+        console.log("player1",player1);
+        const minList_1 = users.filter(user => user.win === minWin+1);
+        player2 = minList_1[random.int(0, minList_1.length-1)];
+        console.log("player2",player2);
+      } else {
+        var index = random.int(0, minList.length-1);
+        player1 = minList[index];
+        console.log("player1 " + index,player1);
+        minList.splice(index,1);
+        console.log("получившийся minList",minList);
+        player2 = minList[random.int(0, minList.length-1)];
+        console.log("player2",player2);
+      }
+
       const postData = {
-        id_player1: users[player1]._id,
-        id_player2: users[player2]._id,
+        id_player1: player1._id,
+        id_player2: player2._id,
         score_p1:0,
         score_p2:0,
         isEnd:false
@@ -42,10 +59,10 @@ class MatchController {
       .then((obj) => {
         let send = {
           ...obj._doc,
-          avatar1: users[player1].avatar,
-          avatar2: users[player2].avatar,
-          name1: users[player1].name,
-          name2: users[player2].name,
+          avatar1: player1.avatar,
+          avatar2: player2.avatar,
+          name1: player1.name,
+          name2: player2.name,
         }
         console.log("текущий матч создан",send);
          return send; 
@@ -135,16 +152,22 @@ class MatchController {
   }
 
   ended(match){
-      let idwin = match.score_p1 == 10 ? match.id_player1 :  match.id_player2,
-      idloser = match.score_p1 == 10 ? match.id_player2 :  match.id_player1,
-      numberWins = 0;
-      UserModel.findById(idwin,(err,result)=>{
+    let idwin = match.score_p1 == 10 ? match.id_player1 :  match.id_player2,
+    idloser = match.score_p1 == 10 ? match.id_player2 :  match.id_player1,
+    numberWins = 0;
+    return UserModel.findById(idloser,(err,result)=>{
+      if (err)
+          return {"error":err};
+      else 
+          numberWins = result.win;
+    }).then(()=>{
+      return UserModel.findById(idwin,(err,result)=>{
         if (err)
             return {"error":err};
         else 
-            numberWins = result.win + 1;
+            numberWins = numberWins > result.win ? numberWins + 1 : result.win+1;
       }).then(()=>{
-        UserModel.findByIdAndUpdate(idwin, {$set:{win: numberWins}},(err) => {
+        return UserModel.findByIdAndUpdate(idwin, {$set:{win: numberWins}},(err) => {
           if (err)
           return res.send(err);
         }).then( ()=> {
@@ -152,7 +175,8 @@ class MatchController {
             if (err)
             return res.send(err);
           })
-      })
+        })
+      });
     });
   }
 }

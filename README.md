@@ -19,7 +19,7 @@
 ## Используемый стэк:
 Front:
 * React+Redux
-* Axious
+* Axios
 * Ant Design
 * Sass
 

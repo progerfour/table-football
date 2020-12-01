@@ -1,8 +1,10 @@
+import path from 'path';
 import mongoose from 'mongoose';
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-const Server = require('socket.io');
+import Server from 'socket.io';
+import dotenv from 'dotenv';
 
 import {UserController} from './controllers/UserController';
 import {AdminController} from './controllers/AdminController';
@@ -41,7 +43,14 @@ const User = new UserController();
 const Admin = new AdminController();
 const Match = new MatchController();
 
-mongoose.connect('mongodb://localhost:27017/football', {
+const loadEnvFile = fileName => {
+  dotenv.config({
+    path: path.join(__dirname, `../../${fileName}`)
+  });
+}
+
+loadEnvFile('.env.local');
+mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
   useCreateIndex:true,
   useFindAndModify:false

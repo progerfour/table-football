@@ -14,23 +14,10 @@ html,
   font-size: 14px;
 }
 
-.header{
-  background-color: $ligth-blue;
-  padding: 15px 0px;
-  text-align: center;
-  color:white;
-
-  h1 {
-    color:white;
-  }
-}
-
-@media (max-width:768px){
-  .header {
-    padding: 5px 0px;
-  }
-}
-
 h1{
   font-size:28px;
+}
+button{
+  border: none;
+  background: none;
 }

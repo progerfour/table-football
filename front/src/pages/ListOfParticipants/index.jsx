@@ -4,12 +4,12 @@ import { Row, Col,Spin } from 'antd';
 import {Link} from "react-router-dom";
 import {connect} from "react-redux";
 
-import './ListOfPartisipants.scss';
-import {Service} from '../../service';
-
+import './ListOfParticipants.scss';
+import { Service } from '../../service';
+import { Header } from '../index';
 var service = new Service();
 
-class ListOfPartisipants extends Component {
+class ListOfParticipants extends Component {
    
     componentDidMount(){
         service.getUsers().then( (items) => {
@@ -19,25 +19,22 @@ class ListOfPartisipants extends Component {
     }
 
     render(){
-        const {listOfPartisipants, loading} = this.props;
-        console.log(" this.props", this.props);
+        const {ListOfParticipants, loading} = this.props;
         if (loading) {
             return <Spin tip="Loading..." className="load"/>
         }
         return (
-            <div>
-                {console.log("listOfPartisipants",listOfPartisipants)}
+            <>
+                <Header page="participants"/>
                 <h1 className="header">Участники</h1>
-                <Link to="/match"><PageButton className="pageButton_right" image="group">Матч</PageButton></Link> 
-                <Link to="/"><PageButton image="exit">Выход</PageButton></Link> 
                 <Row type="flex" justify="center" gutter={16}>
-                    {listOfPartisipants.map(item => (
+                    {ListOfParticipants.map(item => (
                         <Col xs={18} lg={10} key={item._id} >
                             <Participant item={item}/>
                         </Col>
                     ))}
                 </Row>
-            </div>
+            </>
         )
     }
 };
@@ -45,19 +42,16 @@ class ListOfPartisipants extends Component {
 const mapStateToProps = (state) => {
     console.log("mapStateToPropsstate", state)
     return {
-        listOfPartisipants : state.users.items,
+        ListOfParticipants : state.users.items,
         loading : state.users.loading
     };
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        usersLoaded: (newUsers) => {
-            dispatch({
+const mapDispatchToProps = {
+        usersLoaded: (newUsers) => ({
                 type: 'USER_LOADED',
                 payload:newUsers
             })
-        }
-    }
+    
 }
-export default connect(mapStateToProps,mapDispatchToProps)(ListOfPartisipants);
+export default connect(mapStateToProps,mapDispatchToProps)(ListOfParticipants);

@@ -41,7 +41,8 @@ class UserController {
             }
             console.log("avatars",avatars);
             number = +avatars[0].number < 30 ? +avatars[0].number + 1 : 1;
-            id = avatars[0]._id;           
+            id = avatars[0]._id;     
+            return {id, number};      
         }).then( () => {
             const send = {"number":number};
             console.log("send",send);

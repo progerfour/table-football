@@ -1,10 +1,9 @@
-import React, {useEffect} from 'react';
-import { Link } from "react-router-dom";
+import React, { useEffect } from 'react';
 import { connect } from "react-redux"
 
-import { PageButton, Button } from '../../components';
 import './Match.scss';
-import {Service} from '../../service';
+import { Service } from '../../service';
+import { Header } from '../index';
 
 import io from 'socket.io-client';
 
@@ -13,7 +12,7 @@ const socket = io('http://localhost:9998/');
 const service = new Service();
 const Match = (props) => {
  
-  const {isAdmin, game} = props;
+  const { isAdmin, game } = props;
   let {
     _id,
     avatar1,
@@ -40,9 +39,6 @@ const Match = (props) => {
     })
   }, []);
 
-  const newMatch = () => {
-    socket.emit('newMatch');
-  }
 
   const updateScore = (player, score) => {
     if (!isEnd && isAdmin)
@@ -53,16 +49,9 @@ const Match = (props) => {
       });
   }
 
-  return(
-    <section className="match">
-      <div className="match__top">
-        <div className="header">
-          <h1>Текущий матч</h1>
-        </div>
-        <Link to="/Participants"><PageButton className="pageButton_right" image="group">Участники</PageButton></Link> 
-        <Link to="/"><PageButton image="exit">Выход</PageButton></Link> 
-      </div>
-      
+  return (<>
+    <Header page="match"/>
+    <section className="match">    
       <div className="match__result">
       {(_id) ?
         <div className="match__content">
@@ -98,12 +87,8 @@ const Match = (props) => {
         </div>
         }
       </div>
-      
-      {(isAdmin) &&
-      <Button  type="primary" size="large" onClick={newMatch}>Начать новый матч</Button>
-      }
       </section>
-    )
+    </>)
 };
 
 const mapStateToProps = (state) => {
